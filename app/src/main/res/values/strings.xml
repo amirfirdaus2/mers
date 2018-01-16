@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ScanPayment</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_scan">ScanActivity</string>
+    <string name="title_activity_scan_result">ScanResultActivity</string>
+
+    <!---->
+    <string name="button_pay_now">Pay Now</string>
+
+    <!-- RECORD -->
+    <string name="detail_name">Full Name</string>
+    <string name="detail_status">Status</string>
+    <string name="detail_amount">Amount</string>
+    <string name="title_activity_pay_complete">PayCompleteActivity</string>
+
+    <!-- DIALOG -->
+    <string name="dialog_title">Payment Completion</string>
+    <string name="dialog_instruction">To complete the payment, please entered %s</string>
+    <string name="dialog_response_proceed">Proceed</string>
+    <string name="dialog_response_cancel">Cancel</string>
+</resources>
