@@ -1,16 +1,16 @@
 package my.com.maxmoney.scanpayment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
-import my.com.maxmoney.scanpayment.common.NumberGenerator;
+import my.com.maxmoney.scanpayment.common.CodeGenerator;
 
 public class PayCompleteActivity extends AppCompatActivity {
 
@@ -29,15 +29,17 @@ public class PayCompleteActivity extends AppCompatActivity {
         buttonPayComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showVerificationDialog(NumberGenerator.generateNumber());
+                showVerificationDialog(CodeGenerator.generateNumber());
             }
         });
     }
 
-    private void showVerificationDialog(String code) {
+    private void showVerificationDialog(final String code) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_verification_prompt, null);
+
+        final EditText etCode = view.findViewById(R.id.et_code);
 
         dialogBuilder.setView(view);
 
@@ -48,7 +50,10 @@ public class PayCompleteActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton(R.string.dialog_response_proceed, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                String enteredCode = etCode.getText().toString();
+                if(enteredCode.equalsIgnoreCase(code)) {
+                    showSuccess();
+                }
             }
         });
 
@@ -63,4 +68,19 @@ public class PayCompleteActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void showSuccess() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.dialog_success);
+        builder.setPositiveButton(R.string.dialog_response_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }

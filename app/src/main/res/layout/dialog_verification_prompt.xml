@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/fab_margin">
+    android:padding="@dimen/padding_m">
 
-    <TextView
-        android:id="@+id/tv_number_generator"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_code"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="129219"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:text="@string/dialog_edit_text_code"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
 
-</LinearLayout>
+</RelativeLayout>

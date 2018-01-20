@@ -8,7 +8,7 @@ import java.util.Random;
  * Created by iqbalbaharum on 16/01/2018.
  */
 
-public class NumberGenerator {
+public class CodeGenerator {
 
     public static String generateNumber() {
 

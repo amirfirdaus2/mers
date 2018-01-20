@@ -42,7 +42,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if(getSupportActionBar() != null) {
@@ -52,7 +52,8 @@ public class ScanActivity extends AppCompatActivity {
         // Scan type
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
-            mType = bundle.getInt(AppData.INTENT_TYPE);
+            mType = bundle.getInt(AppData.INTENT_TYPE, 0);
+            Log.d(TAG, "Type" + mType);
         }
 
         mCameraView = findViewById(R.id.sv_camera);
@@ -63,6 +64,7 @@ public class ScanActivity extends AppCompatActivity {
 
         mCameraSource = new CameraSource.Builder(this, detector)
                 .setRequestedPreviewSize(640,480)
+                .setAutoFocusEnabled(true)
                 .build();
 
         mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -111,13 +113,16 @@ public class ScanActivity extends AppCompatActivity {
                     String key = qrCodes.valueAt(0).displayValue;
                     Log.d(TAG, key);
 
-                    if(mType == AppData.TYPE_PAY) {
+                    Intent intent;
 
+                    if(mType == AppData.TYPE_PAY) {
+                        intent = new Intent(getApplicationContext(), PayCompleteActivity.class);
                     } else {
-                        Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                        intent = new Intent(getApplicationContext(), ScanResultActivity.class);
                         intent.putExtra(AppData.INTENT_KEY, key);
-                        startActivity(intent);
                     }
+
+                    startActivity(intent);
                 }
             }
         });

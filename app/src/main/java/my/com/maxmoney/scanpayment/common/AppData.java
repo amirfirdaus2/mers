@@ -13,5 +13,9 @@ public class AppData {
 
     public final static int TYPE_SCAN = 9001;
     public final static int TYPE_PAY = 9002;
+
+    public final static int STATUS_SCAN = 2001;
+    public final static int STATUS_PAYMENT_FAILED = 2002;
+    public final static int STATUS_PAYMENT_COMPLETE = 2003;
 }
 

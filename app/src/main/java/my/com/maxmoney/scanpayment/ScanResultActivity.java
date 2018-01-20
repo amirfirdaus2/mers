@@ -27,7 +27,7 @@ public class ScanResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
-                intent.putExtra(AppData.INTENT_TYPE, "pay");
+                intent.putExtra(AppData.INTENT_TYPE, AppData.TYPE_PAY);
                 startActivity(intent);
             }
         });

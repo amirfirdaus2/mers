@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="my.com.maxmoney.scanpayment.ScanActivity">
+    tools:context="my.com.maxmoney.scanpayment.ScanActivity"
+    android:background="@android:color/black">
 
     <SurfaceView
         android:id="@+id/sv_camera"

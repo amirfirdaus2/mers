@@ -13,9 +13,16 @@
     <string name="detail_amount">Amount</string>
     <string name="title_activity_pay_complete">PayCompleteActivity</string>
 
+    <string name="scan_status_scan">Scanned</string>
+    <string name="scan_status_payment_complete">Completed</string>
+    <string name="scan_status_payment_failed">Failed</string>
+
     <!-- DIALOG -->
     <string name="dialog_title">Payment Completion</string>
     <string name="dialog_instruction">To complete the payment, please entered %s</string>
     <string name="dialog_response_proceed">Proceed</string>
     <string name="dialog_response_cancel">Cancel</string>
+    <string name="dialog_edit_text_code">Code</string>
+    <string name="dialog_success">Account updated. Thank you.</string>
+    <string name="dialog_response_ok">OK</string>
 </resources>
