@@ -10,11 +10,19 @@ import java.util.Random;
 
 public class CodeGenerator {
 
-    public static String generateNumber() {
+    public static String generateHex() {
 
         SecureRandom random = new SecureRandom();
         String randomCode = new BigInteger(30, random).toString(32).toUpperCase();
 
         return randomCode;
+    }
+
+    public static String generateNumber() {
+
+        Random random = new Random();
+        int number = random.nextInt(999 - 101) + 101;
+
+        return String.valueOf(number);
     }
 }

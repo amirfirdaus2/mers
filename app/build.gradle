@@ -28,5 +28,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation 'com.google.android.gms:play-services-vision:11.8.0'
-    implementation 'com.nightonke:blurlockview:1.0.0'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.google.code.gson:gson:2.8.1'
 }

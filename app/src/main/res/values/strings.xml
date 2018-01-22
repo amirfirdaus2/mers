@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">ScanPayment</string>
+    <string name="app_name">Scan &amp; Pay</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_scan">ScanActivity</string>
-    <string name="title_activity_scan_result">ScanResultActivity</string>
+    <string name="title_activity_scan">Scan</string>
+    <string name="title_activity_scan_result">Scan Result</string>
+    <string name="title_activity_login">Login</string>
 
     <!---->
     <string name="button_pay_now">Pay Now</string>
+    <string name="button_login">Login</string>
 
     <!-- RECORD -->
-    <string name="detail_name">Full Name</string>
-    <string name="detail_status">Status</string>
-    <string name="detail_amount">Amount</string>
+    <string name="detail_name">Customer Name</string>
+    <string name="detail_status">Payment Status</string>
+    <string name="detail_amount">Payable Amount</string>
     <string name="title_activity_pay_complete">PayCompleteActivity</string>
 
     <string name="scan_status_scan">Scanned</string>
@@ -19,10 +21,11 @@
 
     <!-- DIALOG -->
     <string name="dialog_title">Payment Completion</string>
-    <string name="dialog_instruction">To complete the payment, please entered %s</string>
+    <string name="dialog_instruction">To complete the payment, please enter this number %s</string>
     <string name="dialog_response_proceed">Proceed</string>
     <string name="dialog_response_cancel">Cancel</string>
     <string name="dialog_edit_text_code">Code</string>
     <string name="dialog_success">Account updated. Thank you.</string>
+    <string name="dialog_wrong_id">Invalid Code</string>
     <string name="dialog_response_ok">OK</string>
 </resources>

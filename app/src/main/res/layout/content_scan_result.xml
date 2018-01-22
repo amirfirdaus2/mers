@@ -30,7 +30,7 @@
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MUHAMMAD IQBAL BIN BAHARUM"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         </LinearLayout>
 
@@ -51,7 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="NOT PAID"
-                android:textColor="@android:color/holo_red_dark"/>
+                android:textColor="@android:color/holo_red_dark"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         </LinearLayout>
 

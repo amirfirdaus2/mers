@@ -10,7 +10,7 @@
         android:id="@+id/et_code"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_edit_text_code"
+        android:hint="@string/dialog_edit_text_code"
         android:layout_centerHorizontal="true"
         android:gravity="center"/>
 

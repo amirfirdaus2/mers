@@ -12,12 +12,17 @@ public class ScanModel {
     private String transactionId;
     private Date timestamp;
     private int status;
+    private String amount;
 
     public ScanModel(String name, String transactionId, Date timestamp, int status) {
         this.name = name;
         this.transactionId = transactionId;
         this.timestamp = timestamp;
         this.status = status;
+    }
+
+    public ScanModel() {
+
     }
 
     public String getName() {
@@ -50,5 +55,13 @@ public class ScanModel {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 }

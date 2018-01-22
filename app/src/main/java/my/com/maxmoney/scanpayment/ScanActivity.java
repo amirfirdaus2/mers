@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -36,7 +37,9 @@ public class ScanActivity extends AppCompatActivity {
 
     private final int REQUEST_CAMERA_PERMISSION_ID = 1001;
 
-    private int mType;
+    private boolean mIsDetected = false;
+
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +52,18 @@ public class ScanActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Scan type
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
-            mType = bundle.getInt(AppData.INTENT_TYPE, 0);
-            Log.d(TAG, "Type" + mType);
-        }
-
         mCameraView = findViewById(R.id.sv_camera);
 
         BarcodeDetector detector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ALL_FORMATS)
+                .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
 
         mCameraSource = new CameraSource.Builder(this, detector)
                 .setRequestedPreviewSize(640,480)
                 .setAutoFocusEnabled(true)
                 .build();
+
+        mHandler = new Handler();
 
         mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -103,29 +101,49 @@ public class ScanActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
 
-                if(qrCodes.size() != 0){
+                if(!mIsDetected && qrCodes.size() != 0){
 
-                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    if(vibrator != null) {
-                        vibrator.vibrate(1000);
-                    }
+                    mIsDetected = true;
 
-                    String key = qrCodes.valueAt(0).displayValue;
-                    Log.d(TAG, key);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            if(vibrator != null) {
+                                vibrator.vibrate(1000);
+                            }
 
-                    Intent intent;
+                            String key = qrCodes.valueAt(0).displayValue;
+                            Log.d(TAG, key);
 
-                    if(mType == AppData.TYPE_PAY) {
-                        intent = new Intent(getApplicationContext(), PayCompleteActivity.class);
-                    } else {
-                        intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                        intent.putExtra(AppData.INTENT_KEY, key);
-                    }
+                            Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                            intent.putExtra("jobid", key);
+                            intent.putExtra(AppData.INTENT_KEY, key);
 
-                    startActivity(intent);
+                            startActivity(intent);
+                        }
+
+                    }, 3000);
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mIsDetected = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

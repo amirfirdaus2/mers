@@ -46,21 +46,17 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
         holder.name.setText(model.getName());
         holder.id.setText(model.getTransactionId());
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
         String date = simpleDateFormat.format(model.getTimestamp());
         holder.timestamp.setText(date);
 
         switch (model.getStatus()) {
-            case AppData.STATUS_SCAN:
-                holder.status.setText(R.string.scan_status_scan);
-                holder.status.setTextColor(mContext.getResources().getColor(R.color.colorStatusScan, null));
-                break;
-            case AppData.STATUS_PAYMENT_COMPLETE:
-                holder.status.setText(R.string.scan_status_payment_complete);
+            case 1:
+                holder.status.setText("PAYMENT COMPLETED");
                 holder.status.setTextColor(mContext.getResources().getColor(R.color.colorStatusSuccess, null));
                 break;
-            case AppData.STATUS_PAYMENT_FAILED:
-                holder.status.setText(R.string.scan_status_payment_failed);
+            case 99:
+                holder.status.setText("PAYMENT INCOMPLETE");
                 holder.status.setTextColor(mContext.getResources().getColor(R.color.colorStatusFailed, null));
                 break;
         }
@@ -73,6 +69,11 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
 
     public void add(ScanModel model) {
         mData.add(model);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        mData.clear();
         notifyDataSetChanged();
     }
 

@@ -29,7 +29,7 @@ public class PayCompleteActivity extends AppCompatActivity {
         buttonPayComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showVerificationDialog(CodeGenerator.generateNumber());
+                showVerificationDialog(CodeGenerator.generateHex());
             }
         });
     }
