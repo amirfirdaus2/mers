@@ -26,9 +26,12 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
 
     private Context mContext;
 
-    public ScanAdapter(Context context) {
+    private OnScanViewClickListener mListener;
+
+    public ScanAdapter(Context context, OnScanViewClickListener listener) {
         mData = new ArrayList<>();
         mContext = context;
+        mListener = listener;
     }
 
     @Override
@@ -73,9 +76,17 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
         notifyDataSetChanged();
     }
 
+    public ScanModel get(int pos) {
+        return mData.get(pos);
+    }
+
     public void clear() {
         mData.clear();
         notifyDataSetChanged();
+    }
+
+    public interface OnScanViewClickListener {
+        void onClick(int position);
     }
 
     class ScanViewHolder extends RecyclerView.ViewHolder {
@@ -94,6 +105,13 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
             timestamp = itemView.findViewById(R.id.tv_timestamp);
             status = itemView.findViewById(R.id.tv_status);
             amount = itemView.findViewById(R.id.tv_amount);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onClick(getAdapterPosition());
+                }
+            });
         }
     }
 }

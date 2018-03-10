@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import my.com.maxmoney.scanpayment.adapter.ScanAdapter;
+import my.com.maxmoney.scanpayment.common.AppData;
 import my.com.maxmoney.scanpayment.common.StandardProgressDialog;
 import my.com.maxmoney.scanpayment.model.ScanModel;
 
@@ -65,7 +66,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAdapter = new ScanAdapter(this);
+        mAdapter = new ScanAdapter(this, new ScanAdapter.OnScanViewClickListener() {
+            @Override
+            public void onClick(int position) {
+                ScanModel model = mAdapter.get(position);
+                Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                intent.putExtra("jobid", model.getTransactionId());
+                intent.putExtra(AppData.INTENT_KEY, model.getTransactionId());
+                startActivity(intent);
+            }
+        });
 
         RecyclerView recyclerView = findViewById(R.id.rv_history);
 
