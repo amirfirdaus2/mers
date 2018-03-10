@@ -41,10 +41,12 @@ public class ScanResultActivity extends AppCompatActivity {
     private RelativeLayout mLayout;
 
     private Button mBtnPayNow;
+    private Button mBtnGoHome;
     private TextView mTVName;
     private TextView mTVStatus;
     private TextView mTVAmount;
     private ImageView mIVBarcode;
+    private TextView mTVBarcodeParam;
 
     private String mJobId;
 
@@ -71,6 +73,7 @@ public class ScanResultActivity extends AppCompatActivity {
         mTVStatus = findViewById(R.id.tv_status);
         mTVAmount = findViewById(R.id.tv_amount);
         mIVBarcode = findViewById(R.id.iv_barcode);
+        mTVBarcodeParam = findViewById(R.id.tv_barcode_param);
 
         mProgressDialog = new StandardProgressDialog(this);
 
@@ -81,6 +84,16 @@ public class ScanResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showVerificationDialog(CodeGenerator.generateNumber());
+            }
+        });
+
+        mBtnGoHome = findViewById(R.id.btn_go_home);
+        mBtnGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -123,15 +136,19 @@ public class ScanResultActivity extends AppCompatActivity {
                                     mTVStatus.setText("PAID");
                                     mTVStatus.setTextColor(Color.parseColor("#27ae60"));
                                     mBtnPayNow.setVisibility(View.GONE);
+                                    mBtnGoHome.setVisibility(View.VISIBLE);
                                 } else {
                                     mTVStatus.setText("NOT PAID");
                                     mTVStatus.setTextColor(Color.parseColor("#c0392b"));
                                     mBtnPayNow.setVisibility(View.VISIBLE);
+                                    mBtnGoHome.setVisibility(View.GONE);
                                 }
 
                                 mTVAmount.setText(jsonObject.getString("AMOUNT"));
                                 // Barcode
                                 Picasso.get().load(jsonObject.getString("BARCODE")).into(mIVBarcode);
+                                // Barcode Param
+                                mTVBarcodeParam.setText(jsonObject.getString("BARCODE_PARAMS"));
 
                             } else {
                                 showWrongId();
@@ -246,14 +263,17 @@ public class ScanResultActivity extends AppCompatActivity {
 
     private void showSuccess() {
 
+        // get update record
+        getRecord();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.dialog_success);
         builder.setPositiveButton(R.string.dialog_response_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
             }
         });
         AlertDialog alertDialog = builder.create();

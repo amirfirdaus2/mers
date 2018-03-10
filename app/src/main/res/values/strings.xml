@@ -7,6 +7,7 @@
 
     <!---->
     <string name="button_pay_now">Pay Now</string>
+    <string name="button_go_home">Go To Main Screen</string>
     <string name="button_login">Login</string>
 
     <!-- RECORD -->

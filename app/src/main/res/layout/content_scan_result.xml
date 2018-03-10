@@ -83,6 +83,13 @@
             android:scaleType="fitXY"
             android:layout_marginTop="@dimen/padding_m"/>
 
+        <TextView
+            android:id="@+id/tv_barcode_param"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -90,7 +97,8 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_pay_now"
@@ -100,6 +108,18 @@
             style="?android:attr/borderlessButtonStyle"
             android:textColor="@android:color/white"
             android:drawablePadding="@dimen/padding_m"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/btn_go_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_go_home"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@android:color/white"
+            android:drawablePadding="@dimen/padding_m"
+            android:visibility="gone"
             />
 
     </LinearLayout>
