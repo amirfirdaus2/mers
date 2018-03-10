@@ -1,14 +1,19 @@
 package my.com.maxmoney.scanpayment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,7 +32,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import my.com.maxmoney.scanpayment.common.StandardProgressDialog;
+
 public class LoginActivity extends AppCompatActivity {
+
+    private TextInputLayout mTILUsername;
+    private TextInputLayout mTILPassword;
+
+    private StandardProgressDialog mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +48,44 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mTILUsername = findViewById(R.id.til_username);
+        mTILPassword = findViewById(R.id.til_password);
 
-        final EditText etUsername = findViewById(R.id.et_username);
-        final EditText etPassword = findViewById(R.id.et_password);
+        mTILUsername.setHint(getResources().getString(R.string.form_username));
+        mTILPassword.setHint(getResources().getString(R.string.form_password));
 
         Button btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login(
-                        etUsername.getText().toString(),
-                        etPassword.getText().toString()
-                );
+
+                Editable username = mTILUsername.getEditText().getText();
+                Editable password = mTILPassword.getEditText().getText();
+
+                if(username != null && password != null) {
+
+                    login(
+                            username.toString(),
+                            password.toString()
+                    );
+                }
             }
         });
 
+        mProgress = new StandardProgressDialog(this);
+        mProgress.setMessage("Authenticating");
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitAppAlert();
     }
 
     private void login(String username, String password) {
+
+        hideKeyboard();
+
+        mProgress.show();
 
         final JSONObject jsonData = new JSONObject();
 
@@ -72,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
+                mProgress.dismiss();
 
                 try {
 
@@ -83,10 +116,13 @@ public class LoginActivity extends AppCompatActivity {
                                 .edit()
                                     .putString("BRANCHCODE", jsonObject.getString("BRANCHCODE"))
                                     .putString("NAME", jsonObject.getString("FULLNAME"))
-                                .commit();
+                                .apply();
 
                         startActivity(intent);
                         finish();
+                    } else {
+                        mTILUsername.setError("Incorrect username");
+                        mTILPassword.setError("Incorrect password");
                     }
 
                 } catch (JSONException e) {
@@ -96,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                mProgress.dismiss();
             }
         }){
 
@@ -110,6 +146,38 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(getBaseContext()).add(jsonReq);
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    private void showExitAppAlert() {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        dialogBuilder.setTitle(R.string.dialog_exit_app);
+        dialogBuilder.setMessage(getString(R.string.dialog_exit_ask));
+        dialogBuilder.setPositiveButton(R.string.dialog_response_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishAndRemoveTask();
+            }
+        });
+
+        dialogBuilder.setNegativeButton(R.string.dialog_response_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // pass
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
 }

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/dialog_edit_text_code"
         android:layout_centerHorizontal="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:inputType="number"/>
 
 </RelativeLayout>

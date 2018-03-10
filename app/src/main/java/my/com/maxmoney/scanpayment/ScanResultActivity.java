@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -20,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,17 +32,23 @@ import java.util.Map;
 
 import my.com.maxmoney.scanpayment.common.AppData;
 import my.com.maxmoney.scanpayment.common.CodeGenerator;
+import my.com.maxmoney.scanpayment.common.StandardProgressDialog;
 
 public class ScanResultActivity extends AppCompatActivity {
 
     private final static String TAG = ScanResultActivity.class.getSimpleName();
 
+    private RelativeLayout mLayout;
+
     private Button mBtnPayNow;
     private TextView mTVName;
     private TextView mTVStatus;
     private TextView mTVAmount;
+    private ImageView mIVBarcode;
 
     private String mJobId;
+
+    private StandardProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +66,13 @@ public class ScanResultActivity extends AppCompatActivity {
             finish();
         }
 
+        mLayout = findViewById(R.id.layout_content);
         mTVName = findViewById(R.id.tv_name);
         mTVStatus = findViewById(R.id.tv_status);
         mTVAmount = findViewById(R.id.tv_amount);
+        mIVBarcode = findViewById(R.id.iv_barcode);
+
+        mProgressDialog = new StandardProgressDialog(this);
 
         getRecord();
 
@@ -82,6 +95,8 @@ public class ScanResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mProgressDialog.show();
+
         JsonObjectRequest jsonReq = new JsonObjectRequest(
                 Request.Method.POST,
                 "http://zeptopay.co/app/scan-pay.php",
@@ -90,12 +105,17 @@ public class ScanResultActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
 
+                        mProgressDialog.dismiss();
+
                         Log.d(TAG, jsonObject.toString());
 
                         try {
 
                             int status = jsonObject.getInt("STATUS");
                             if(status == 1) {
+
+                                mLayout.setVisibility(View.VISIBLE);
+
                                 mTVName.setText(jsonObject.getString("FULLNAME"));
 
                                 String payStatus = jsonObject.getString("PAYSTATUS");
@@ -105,9 +125,14 @@ public class ScanResultActivity extends AppCompatActivity {
                                     mBtnPayNow.setVisibility(View.GONE);
                                 } else {
                                     mTVStatus.setText("NOT PAID");
+                                    mTVStatus.setTextColor(Color.parseColor("#c0392b"));
+                                    mBtnPayNow.setVisibility(View.VISIBLE);
                                 }
 
                                 mTVAmount.setText(jsonObject.getString("AMOUNT"));
+                                // Barcode
+                                Picasso.get().load(jsonObject.getString("BARCODE")).into(mIVBarcode);
+
                             } else {
                                 showWrongId();
                             }
@@ -120,6 +145,8 @@ public class ScanResultActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
+                mProgressDialog.dismiss();
+                showServerError();
             }
         }){
 
@@ -149,6 +176,8 @@ public class ScanResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mProgressDialog.show();
+
         JsonObjectRequest jsonReq = new JsonObjectRequest(
                 Request.Method.POST,
                 "http://zeptopay.co/app/scan-pay.php",
@@ -156,12 +185,15 @@ public class ScanResultActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
+                        mProgressDialog.dismiss();
                         showSuccess();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
+                mProgressDialog.dismiss();
+                showServerError();
             }
         }){
 
@@ -233,6 +265,21 @@ public class ScanResultActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.dialog_wrong_id);
+        builder.setPositiveButton(R.string.dialog_response_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void showServerError() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.dialog_server_response_error);
         builder.setPositiveButton(R.string.dialog_response_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

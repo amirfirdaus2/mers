@@ -45,6 +45,7 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
 
         holder.name.setText(model.getName());
         holder.id.setText(model.getTransactionId());
+        holder.amount.setText(model.getAmount());
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
         String date = simpleDateFormat.format(model.getTimestamp());
@@ -83,6 +84,7 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
         TextView id;
         TextView timestamp;
         TextView status;
+        TextView amount;
 
         public ScanViewHolder(View itemView) {
             super(itemView);
@@ -91,6 +93,7 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder
             id = itemView.findViewById(R.id.tv_transId);
             timestamp = itemView.findViewById(R.id.tv_timestamp);
             status = itemView.findViewById(R.id.tv_status);
+            amount = itemView.findViewById(R.id.tv_amount);
         }
     }
 }

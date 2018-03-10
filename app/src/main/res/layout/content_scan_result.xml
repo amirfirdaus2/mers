@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="my.com.maxmoney.scanpayment.ScanResultActivity"
-    tools:showIn="@layout/activity_scan_result">
+    tools:showIn="@layout/activity_scan_result"
+    android:id="@+id/layout_content"
+    android:visibility="invisible">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,8 +52,6 @@
                 android:id="@+id/tv_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NOT PAID"
-                android:textColor="@android:color/holo_red_dark"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         </LinearLayout>
@@ -72,10 +72,16 @@
                 android:id="@+id/tv_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RM 300.20"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/padding_m"/>
 
     </LinearLayout>
 
@@ -88,12 +94,11 @@
 
         <Button
             android:id="@+id/btn_pay_now"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_pay_now"
             style="?android:attr/borderlessButtonStyle"
             android:textColor="@android:color/white"
-            android:drawableStart="@drawable/ic_barcode_white_24dp"
             android:drawablePadding="@dimen/padding_m"
             />
 

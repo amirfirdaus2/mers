@@ -1,5 +1,6 @@
 package my.com.maxmoney.scanpayment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,6 +38,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import my.com.maxmoney.scanpayment.adapter.ScanAdapter;
+import my.com.maxmoney.scanpayment.common.StandardProgressDialog;
 import my.com.maxmoney.scanpayment.model.ScanModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
 
     private ScanAdapter mAdapter;
+
+    private StandardProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(mAdapter);
+
+        mProgressDialog = new StandardProgressDialog(this);
     }
 
     @Override
@@ -87,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /***
+     * Disabled back button
+     */
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+
     private void populateHistories() {
 //        mAdapter.add(new ScanModel("MUHAMMAD IQBAL", "120102102", new Date(), 2001));
 //        mAdapter.add(new ScanModel("MUHAMMAD IQBAL", "120102102", new Date(), 2002));
@@ -102,12 +116,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mProgressDialog.show();
+
         JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.POST,
                 "https://zeptopay.co/app/scan-pay-list.php",
                 jsonData,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject object) {
+
+                        mProgressDialog.dismiss();
+
                         Log.d(TAG, object.toString());
 
                         try {
@@ -139,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                mProgressDialog.dismiss();
             }
         }){
 
@@ -153,5 +172,32 @@ public class MainActivity extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(getBaseContext()).add(jsonReq);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .edit()
+                            .putString("BRANCHCODE", "")
+                            .putString("NAME", "")
+                        .apply();
+
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+
+        return true;
     }
 }

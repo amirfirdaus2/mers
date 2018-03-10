@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.com.maxmoney.scanpayment">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -16,7 +16,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ScanActivity"
             android:label="@string/title_activity_scan"
@@ -56,6 +56,10 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
